@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>東京デザインマップ</title>
+<meta name="description" content="建築家・アーティストの設計による施設や、カフェ・ショップ・公園を地図で探す個人用マップ">
+<meta name="theme-color" content="#F2F3F0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Shippori+Mincho+B1:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="vendor/markercluster/MarkerCluster.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <h1 class="brand"><span class="brand-mark" aria-hidden="true"></span>東京デザインマップ</h1>
+    <div class="search">
+      <label for="q" class="visually-hidden">キーワード検索</label>
+      <input id="q" type="search" placeholder="施設名・設計者・エリアで検索" autocomplete="off" enterkeyhint="search">
+    </div>
+    <button id="filter-btn" class="icon-btn" type="button" aria-expanded="false" aria-controls="filters">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+      <span>絞り込み</span>
+      <span id="filter-count" class="badge" hidden>0</span>
+    </button>
+  </header>
+
+  <section id="filters" class="filters" hidden aria-label="絞り込み条件">
+    <div class="filters-inner">
+      <div class="filter-group">
+        <h2 class="label">カテゴリ</h2>
+        <div id="cat-chips" class="chips"></div>
+      </div>
+      <div class="filter-group">
+        <h2 class="label">条件</h2>
+        <div class="chips">
+          <button type="button" class="chip toggle" data-flag="designed" aria-pressed="false">設計者がわかる</button>
+          <button type="button" class="chip toggle" data-flag="indoor" aria-pressed="false">雨の日OK（屋内）</button>
+          <button type="button" class="chip toggle" data-flag="free" aria-pressed="false">無料</button>
+          <button type="button" class="chip toggle" data-flag="openToday" aria-pressed="false">今日開いている</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label class="label" for="ward">区</label>
+        <select id="ward"><option value="">23区すべて</option></select>
+      </div>
+      <div class="filter-actions">
+        <button id="filter-reset" type="button" class="text-btn">条件をクリア</button>
+        <button id="filter-close" type="button" class="primary-btn">地図に戻る</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="stage">
+    <div id="map" role="application" aria-label="東京の地図"></div>
+    <button id="locate" class="locate" type="button" aria-pressed="false" title="現在地を表示">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+      <span class="visually-hidden">現在地を表示</span>
+    </button>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </main>
+
+  <aside id="sheet" class="sheet" data-state="peek" aria-label="スポット">
+    <button id="sheet-handle" class="sheet-handle" type="button" aria-label="一覧を広げる" aria-expanded="false"><span></span></button>
+
+    <div id="list-view" class="view">
+      <div class="list-head">
+        <div>
+          <h2 class="list-title">近くのスポット</h2>
+          <p id="list-basis" class="list-basis">地図の中心から近い順</p>
+        </div>
+        <p id="list-count" class="list-count"></p>
+      </div>
+      <div class="radius" role="group" aria-label="範囲">
+        <button type="button" class="seg" data-radius="500">500m</button>
+        <button type="button" class="seg" data-radius="1000">1km</button>
+        <button type="button" class="seg" data-radius="3000" aria-pressed="true">3km</button>
+        <button type="button" class="seg" data-radius="0">すべて</button>
+      </div>
+      <ol id="list" class="list"></ol>
+      <p id="list-empty" class="empty" hidden></p>
+    </div>
+
+    <article id="detail-view" class="view detail" hidden>
+      <button id="back" type="button" class="back-btn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>一覧に戻る
+      </button>
+      <div id="detail"></div>
+    </article>
+  </aside>
+
+</div>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="vendor/markercluster/leaflet.markercluster.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
